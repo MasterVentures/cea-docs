@@ -1,33 +1,32 @@
 # cea-exchange-test-plan-docs
 
-Exchange Test Plan Documentation for Crypto Exchange Alliance Orderbook Taker and Maker
+## *Exchange Test Plan Documentation for Crypto Exchange Alliance Orderbook Taker and Maker*
 
 
-- Overview
+### **Overview**
 
 This document details the behaviour for the order book web-socket service, how to implement its methods 
 and the expected results from the tests. 
 
-- Prerequisites
+### **Prerequisites**
 
 Prior to sending any request to the Orderbook service, the exchange must know the following values:
 
-HOST: Publicly accessible hostname.
+**HOST:** Publicly accessible hostname.
 
-EXCHANGE_ID: String specified in the URI to map the exchange interacting with the orderbook endpoints.
+**EXCHANGE_ID:** String specified in the URI to map the exchange interacting with the orderbook endpoints.
 
-HEADER: Security string that have the type of security and a key provided for the administrator.
-must be in this form: -H “apikey: xxxxxxxxx”
-
+**HEADER:** Security string that have the type of security and a key provided for the administrator, must be in this form: -H “apikey: xxxxxxxxx”
 
 
---------------------------------------SET ORDERBOOK:---------------------------------------------
 
-Channel:	ws://${HOST}/${EXCHANGE_ID/maker/orderbook/set
+### **SET ORDERBOOK:**
 
-Description:	Start a web-socket connection used by the exchange to publish a symbol orderbook.
+**Channel:** ws://${HOST}/${EXCHANGE_ID/maker/orderbook/set
 
-Request: 	Once the connection has been established, the exchange can submit the order book message, 
+**Description:** Start a web-socket connection used by the exchange to publish a symbol orderbook.
+
+**Request:** 	Once the connection has been established, the exchange can submit the order book message, 
 following the example:
 
 {
