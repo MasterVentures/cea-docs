@@ -26,7 +26,7 @@ Prior to sending any request to the Orderbook service, the exchange must know th
 **Request:** 	Once the connection has been established, the exchange can submit the order book message, following the example:
 
 ```javascript {.line-numbers}
->{
+{
   "symbol": "BTC/USDT"
   "asks": [
     {
@@ -52,7 +52,7 @@ Prior to sending any request to the Orderbook service, the exchange must know th
       "qty": 600
     }    
   ]
->}
+}
 ```
 
 **Response:** This web-socket channel will not send a response back, unless there is an error reading the submitted order book. 
@@ -246,7 +246,7 @@ In case of errors expect a response like the following:
 }
 ```
 
->*Fields executionId, fillQty, fillPrice, missingQty, >execQty, avgPrice, settleDate,transactTime, and currency >should only be filled for status 3 or 4.*
+*Fields executionId, fillQty, fillPrice, missingQty, >execQty, avgPrice, settleDate,transactTime, and currency >should only be filled for status 3 or 4.*
 
 **Response:** No response is required.
 
