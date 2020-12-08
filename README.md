@@ -30,32 +30,32 @@ Prior to sending any request to the Orderbook service, the exchange must know th
 following the example:
 
 >{
-  "symbol": "BTC/USDT"
-  "asks": [
-    {
-      "price": "9000.00",
-      "qty": 1000
-    },
-    {
-      "price": "9500.00",
-      "qty": 500
-    },
-    {
-      "price": "1000.00",
-      "qty": 50
-    }
-  ],
-  "bids": [
-    {
-      "price": "10250.00",
-      "qty": 700
-    },
-    {
-      "price": "10500.00",
-      "qty": 600
-    }    
-  ]
-}
+>  "symbol": "BTC/USDT"
+>  "asks": [
+>    {
+>      "price": "9000.00",
+>      "qty": 1000
+>    },
+>    {
+>      "price": "9500.00",
+>      "qty": 500
+>    },
+>    {
+>      "price": "1000.00",
+>      "qty": 50
+>    }
+>  ],
+>  "bids": [
+>    {
+>      "price": "10250.00",
+>      "qty": 700
+>    },
+>    {
+>      "price": "10500.00",
+>      "qty": 600
+>    }    
+>  ]
+>}
 
 Response: This web-socket channel will not send a response back, unless there is an error reading 
 the submitted order book. 
