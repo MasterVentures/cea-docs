@@ -29,7 +29,7 @@ Prior to sending any request to the Orderbook service, the exchange must know th
 **Request:** 	Once the connection has been established, the exchange can submit the order book message, 
 following the example:
 
-{
+>{
   "symbol": "BTC/USDT"
   "asks": [
     {
