@@ -284,6 +284,10 @@ In case of errors expect a response like the following:
   "originalMessage": "the orderbook message sent"
 }
 ```
+### **TESTING ORDERBOOK** 
+To make this test we are working with the tool wscat:
+
+<https://www.npmjs.com/package/wscat>
 
 
 Please join us in Discord, specifically to our #ceatestnet channel, a place where we will interact with our Exchange community! Here's the invite:
