@@ -285,18 +285,7 @@ In case of errors expect a response like the following:
 }
 ```
 
-Link 
-https://master.ventures/wp-content/uploads/2020/09/MasterVenturesHorizontal.png
-Copy image to root /assets folder
-Click me to browse image file
 
-Upload
-Click me to browse image file
-
-use 
-imgur
- to upload images
-Show history
 Please join us in Discord, specifically to our #ceatestnet channel, a place where we will interact with our Exchange community! Here's the invite: https://discord.gg/6xzYRTJGNf
 
 
