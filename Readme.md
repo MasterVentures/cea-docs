@@ -286,7 +286,9 @@ In case of errors expect a response like the following:
 ```
 
 
-Please join us in Discord, specifically to our #ceatestnet channel, a place where we will interact with our Exchange community! Here's the invite: <https://discord.gg/6xzYRTJGNf>
+Please join us in Discord, specifically to our #ceatestnet channel, a place where we will interact with our Exchange community! Here's the invite:
+![MasterVentures](https://master.ventures/wp-content/uploads/2020/10/MasterVentures-logo-only-1.png "MasterVentures")
+<https://discord.gg/6xzYRTJGNf>
 
 
 
