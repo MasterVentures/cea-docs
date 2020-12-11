@@ -5,7 +5,8 @@
 
 ### **Overview**
 
-This document details the behaviour for the order book web-socket service, how to implement its methods and the expected results from the tests. 
+This document details the behaviour for the order book web-socket service, how to implement its methods 
+and the expected results from the tests. 
 
 ### **Prerequisites**
 
@@ -15,7 +16,8 @@ Prior to sending any request to the Orderbook service, the exchange must know th
 
 **_EXCHANGE_ID:_** String specified in the URI to map the exchange interacting with the orderbook endpoints.
 
-**_HEADER:_** Security string that have the type of security and a key provided for the administrator, must be in this form: -H “apikey: xxxxxxxxx”
+**_HEADER:_** Security string that have the type of security and a key provided for the administrator, 
+must be in this form: -H “apikey: xxxxxxxxx”
 
 ### **SET ORDERBOOK:**
 
@@ -85,7 +87,8 @@ In case of errors expect a response like the following:
 }
 ```
 
->subscriptionType indicates if the exchange will subscribe to receive updates for the specified symbol.A subscriptionType of 1 means it will subscribe to updates and a subscriptionType of 2 means it cancels previous subscriptions >for the specified symbol.
+>subscriptionType indicates if the exchange will subscribe to receive updates for the specified symbol.A subscriptionType
+>of 1 means it will subscribe to updates and a subscriptionType of 2 means it cancels previous subscriptions for the specified symbol.
 
 
 **Response:**   This websocket channel will send updates back to the exchange, including errors:
@@ -132,7 +135,8 @@ In case of errors expect a response like the following:
 
 **Channel:** ws://${HOST}/${EXCHANGE_ID/taker/order/set
 
-**Description:** Start a web-socket connection used by the exchange to submit orders that will be resolved by the aggregated order book.
+**Description:** Start a web-socket connection used by the exchange to submit orders that will be 
+resolved by the aggregated order book.
 
 **Request:** Once the connection has been established, the exchange can submit orders,following the schema:
 
@@ -151,7 +155,8 @@ In case of errors expect a response like the following:
 }
 ```
 
-**Response:**   This web-socket channel will not send a response back, unless there is an error reading the submitted order.
+**Response:**   This web-socket channel will not send a response back, unless there is an error 
+reading the submitted order.
 
 >In case of errors expect a response like the following:
 
@@ -169,7 +174,8 @@ In case of errors expect a response like the following:
 
 **Description:** This channel allows an exchange to submit update or cancel request for active orders. 
 
-**Request:** Once the connection has been established, the exchange can submit update requests on a previously submitted order:
+**Request:** Once the connection has been established, the exchange can submit update requests on 
+a previously submitted order:
 
 ```javascript {.line-numbers}
 {
@@ -219,14 +225,16 @@ In case of errors expect a response like the following:
 >
 >-Order cancelled
 
-*Fields executionId, fillQty, fillPrice, missingQty, execQty, avgPrice, settleDate, transactTime, and currency should only be filled for status 3 or 4.*
+*Fields executionId, fillQty, fillPrice, missingQty, execQty, avgPrice, settleDate, transactTime, and currency 
+should only be filled for status 3 or 4.*
 
 
 ### **EXECUTE ORDERS**
 
 **Channel:** ws://${HOST}/${EXCHANGE_ID/maker/order/get
 
-**Description:** Start a web-socket connection used by the exchange to receive orders that need to be executed accordingly with the submitted order book .
+**Description:** Start a web-socket connection used by the exchange to receive orders that need to be executed
+accordingly with the submitted order book .
 
 **Request:** Once the connection has been established, the exchange will receive order request, following the schema:
 
@@ -246,7 +254,8 @@ In case of errors expect a response like the following:
 }
 ```
 
-*Fields executionId, fillQty, fillPrice, missingQty, >execQty, avgPrice, settleDate,transactTime, and currency >should only be filled for status 3 or 4.*
+*Fields executionId, fillQty, fillPrice, missingQty, >execQty, avgPrice, settleDate,transactTime, and currency 
+should only be filled for status 3 or 4.*
 
 **Response:** No response is required.
 
@@ -273,7 +282,8 @@ In case of errors expect a response like the following:
 }
 ```
 
-**Response:**   This web-socket channel will not send a response back unless there is an error reading the submitted update.
+**Response:**   This web-socket channel will not send a response back unless there is an error 
+reading the submitted update.
 
 ```javascript {.line-numbers}
 {
@@ -285,12 +295,34 @@ In case of errors expect a response like the following:
 }
 ```
 ### **TESTING ORDERBOOK** 
-To make this test we are working with the tool wscat:
+To make this test we are working with the tool wscat (is a external tool that aloud us to test web sockets):
 
 <https://www.npmjs.com/package/wscat>
 
+**Requisites to the Test:**
 
-Please join us in Discord, specifically to our #ceatestnet channel, a place where we will interact with our Exchange community! Here's the invite:
+>1. Host:  dev-api.cealliance.io
+>2. EXCHANGE_ID: tatis
+>3. Header: -H "apikey: 6HsXH94q5cAGy67G"
+
+Now with all the requisites, we can make our test. For this after we install wscat, we are goin to open a 
+terminal and test the Web Socket in every service with this commands lines:
+
+>wscat -H "apikey: 6HsXH94q5cAGy67G" -c ws://dev-api.cealliance.io/tatis/maker/orderbook/set
+>
+>wscat -H "apikey: 6HsXH94q5cAGy67G" -c ws://dev-api.cealliance.io/tatis/taker/orderbook/get
+>
+>wscat -H "apikey: 6HsXH94q5cAGy67G" -c ws://dev-api.cealliance.io/tatis/taker/order/set
+>
+>wscat -H "apikey: 6HsXH94q5cAGy67G" -c ws://dev-api.cealliance.io/tatis/order/set/update
+>
+>wscat -H "apikey: 6HsXH94q5cAGy67G" -c ws://dev-api.cealliance.io/tatis/maker/order/get
+>
+>wscat -H "apikey: 6HsXH94q5cAGy67G" -c ws://dev-api.cealliance.io/tatis/order/get/update
+
+
+Please join us in Discord, specifically to our #ceatestnet channel, a place where we will interact with our 
+Exchange community! Here's the invite:
 <https://discord.gg/6xzYRTJGNf>
 
 
