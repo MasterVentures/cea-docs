@@ -1,0 +1,179 @@
+version: 2.1
+orbs:
+  gcp-gcr: circleci/gcp-gcr@0.8.0
+  gcp-gke: circleci/gcp-gke@1.1.0
+  sonarcloud: sonarsource/sonarcloud@1.0.2
+  slack: circleci/slack@3.4.2
+jobs:
+
+  build:
+    machine:
+      image: ubuntu-1604:202007-01
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run: docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
+      - run: 
+          name: Replace the backslash for a hyphen if the CIRCLE_BRANCH is a feature, release or hotfix branch.
+          command: |
+            echo "export CIRCLE_BRANCH=$( echo ${CIRCLE_BRANCH} | sed 's_/_-_' )" >> $BASH_ENV
+      - gcp-gcr/build-image:
+          image: $CIRCLE_PROJECT_REPONAME
+          extra_build_args: "--target build"
+          tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
+      - slack/status:
+          fail_only: true
+
+  publish:
+    machine:
+      image: ubuntu-1604:202007-01
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run: docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
+      - run: 
+          name: Replace the backslash for a hyphen if the CIRCLE_BRANCH is a feature, release or hotfix branch.
+          command: |
+            echo "export CIRCLE_BRANCH=$( echo ${CIRCLE_BRANCH} | sed 's_/_-_' )" >> $BASH_ENV
+      - gcp-gcr/build-image:
+          image: "$CIRCLE_PROJECT_REPONAME"
+          extra_build_args: "--target production" 
+          tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
+      - gcp-gcr/gcr-auth
+      - gcp-gcr/push-image:
+          image: $CIRCLE_PROJECT_REPONAME
+          tag: $CIRCLE_BRANCH-$CIRCLE_SHA1
+      - gcp-gcr/tag-image:
+          image: $CIRCLE_PROJECT_REPONAME
+          source-tag: $CIRCLE_BRANCH-$CIRCLE_SHA1
+          target-tag: $CIRCLE_BRANCH-latest
+      - slack/status:
+          fail_only: true
+    
+  deploy-dev:
+    machine:
+      image: ubuntu-1604:202007-01
+      docker_layer_caching: true
+    steps:
+      - run: 
+          name: Replace the backslash for a hyphen if the CIRCLE_BRANCH is a feature, release or hotfix branch.
+          command: |
+            echo "export CIRCLE_BRANCH=$( echo ${CIRCLE_BRANCH} | sed 's_/_-_' )" >> $BASH_ENV
+      - gcp-gke/install
+      - gcp-gke/update-kubeconfig-with-credentials:
+          cluster: $GKE_CLUSTER_DEV
+          perform-login: true
+      - gcp-gke/rollout-image:
+          cluster: $GKE_CLUSTER_DEV
+          deployment: $CIRCLE_PROJECT_REPONAME
+          container: docs
+          image: gcr.io/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME
+          tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
+      - slack/status
+
+  deploy-prod:
+    machine:
+      image: ubuntu-1604:202007-01
+      docker_layer_caching: true
+    steps:
+      - gcp-gke/install
+      - gcp-gke/update-kubeconfig-with-credentials:
+          cluster: $GKE_CLUSTER_PROD
+          perform-login: true
+      - gcp-gke/rollout-image:
+          cluster: $GKE_CLUSTER_PROD
+          deployment: $CIRCLE_PROJECT_REPONAME
+          container: docs
+          image: gcr.io/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME
+          tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
+      - slack/status
+
+workflows:
+  version: 2
+  build-test-and-approval-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+                - cicd-development
+                # Include features branches
+                - /^feature.*/
+                # Include release branches
+                - /^release.*/
+                # Include hotfix branches
+                - /^hotfix.*/
+          context: 
+            - cea-gcp
+            - docker-hub-creds
+      - publish:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+                # Include features branches
+                - /^feature.*/
+                # Include release branches
+                - /^release.*/
+                # Include hotfix branches
+                - /^hotfix.*/
+          context: 
+            - cea-gcp
+            - docker-hub-creds
+      - slack/approval-notification:
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+                # Include features branches
+                - /^feature.*/
+                # Include release branches
+                - /^release.*/
+                # Include hotfix branches
+                - /^hotfix.*/
+          requires:
+            - publish
+      - hold-deploy:
+          type: approval
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+                # Include features branches
+                - /^feature.*/
+                # Include release branches
+                - /^release.*/
+                # Include hotfix branches
+                - /^hotfix.*/
+          requires:
+            - publish
+      - deploy-dev:
+          requires:
+            - hold-deploy
+          filters:
+            branches:
+              only:
+                - develop
+                # Include features branches
+                - /^feature.*/
+                # Include release branches
+                - /^release.*/
+                # Include hotfix branches
+                - /^hotfix.*/
+          context: cea-gcp
+      - deploy-prod:
+          requires:
+            - hold-deploy
+          filters:
+            branches:
+              only:
+                - master
+          context: cea-gcp
+          
