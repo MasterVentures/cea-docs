@@ -1,14 +1,11 @@
-# cea-exchange-test-plan-docs
+# Exchange Test Plan Documentation for Crypto Exchange Alliance Orderbook Taker and Maker
 
-## *Exchange Test Plan Documentation for Crypto Exchange Alliance Orderbook Taker and Maker*
-
-
-### **Overview**
+## Overview
 
 This document details the behaviour for the order book web-socket service, how to implement its methods 
 and the expected results from the tests. 
 
-### **Prerequisites**
+## Prerequisites
 
 Prior to sending any request to the Orderbook service, the exchange must know the following values:
 
@@ -19,7 +16,7 @@ Prior to sending any request to the Orderbook service, the exchange must know th
 **_HEADER:_** Security string that have the type of security and a key provided for the administrator, 
 must be in this form: -H “apikey: xxxxxxxxx”
 
-### **SET ORDERBOOK:**
+### Set Orderbook
 
 **Channel:** ws://${HOST}/${EXCHANGE_ID/maker/orderbook/set
 
@@ -27,7 +24,7 @@ must be in this form: -H “apikey: xxxxxxxxx”
 
 **Request:** 	Once the connection has been established, the exchange can submit the order book message, following the example:
 
-```javascript {.line-numbers}
+```javascript
 {
   "symbol": "BTC/USDT"
   "asks": [
@@ -61,7 +58,7 @@ must be in this form: -H “apikey: xxxxxxxxx”
 
 In case of errors expect a response like the following:
 
-```javascript {.line-numbers}
+```javascript
 {
   "failure": {
     "errorType": "Malformed Message" | "Server error"
@@ -71,7 +68,7 @@ In case of errors expect a response like the following:
 }
 ```
 
-### **GET AGGREGATED ORDERBOOK:**
+### Get aggregated Orderbook
 
 **Channel:** ws://${HOST}/${EXCHANGE_ID/taker/orderbook/get
 
@@ -79,7 +76,7 @@ In case of errors expect a response like the following:
 
 **Request:** Once the connection has been established, the exchange can submit the order book prompt message, following the example:
 
-```javascript {.line-numbers}
+```javascript
 {
   "symbol": "BTC/USDT"
   "depth": 10, //order book depth, a depth of 0 means full book
@@ -93,7 +90,7 @@ In case of errors expect a response like the following:
 
 **Response:**   This websocket channel will send updates back to the exchange, including errors:
 
-```javascript {.line-numbers}
+```javascript
 {
   "responseType": 1, //1 for updates, 2 for errors
   "err": { // in case of updates this property will be empty
@@ -130,8 +127,7 @@ In case of errors expect a response like the following:
 }
 ```
 
-
-### **SUBMIT NEW ORDERS**
+### Submit New Orders
 
 **Channel:** ws://${HOST}/${EXCHANGE_ID/taker/order/set
 
@@ -140,7 +136,7 @@ resolved by the aggregated order book.
 
 **Request:** Once the connection has been established, the exchange can submit orders,following the schema:
 
-```javascript {.line-numbers}
+```javascript
 {
   "orderID": "1235",
   "symbol": "BTC/USDT"
@@ -160,7 +156,7 @@ reading the submitted order.
 
 >In case of errors expect a response like the following:
 
-```javascript {.line-numbers}
+```javascript
 {
   "originalMessage": "submitted order..",
   "errorType": "NEW ORDER REQUEST: Malformed Request"
@@ -168,7 +164,7 @@ reading the submitted order.
 }
 ```
 
-### **ORDER UPDATES**
+### Order Updates
 
 **Channel:** ws://${HOST}/${EXCHANGE_ID/taker/order/set/update
 
@@ -177,7 +173,7 @@ reading the submitted order.
 **Request:** Once the connection has been established, the exchange can submit update requests on 
 a previously submitted order:
 
-```javascript {.line-numbers}
+```javascript
 {
   "orderID": "1235",
   "updateType": 1 | 2,
@@ -190,7 +186,7 @@ a previously submitted order:
 
 **Response:**   This web-socket channel will respond synchronous messages  with the update:
 
-```javascript {.line-numbers}
+```javascript
 {
   "responseType": 1 | 2,  
   "err": {
@@ -229,7 +225,7 @@ a previously submitted order:
 should only be filled for status 3 or 4.*
 
 
-### **EXECUTE ORDERS**
+### Execute Orders
 
 **Channel:** ws://${HOST}/${EXCHANGE_ID/maker/order/get
 
@@ -238,7 +234,7 @@ accordingly with the submitted order book .
 
 **Request:** Once the connection has been established, the exchange will receive order request, following the schema:
 
-```javascript {.line-numbers}
+```javascript
 {
   "orderId": "123456",
   "status": 1 | 2 | 3 | 4 | 5,
@@ -259,7 +255,7 @@ should only be filled for status 3 or 4.*
 
 **Response:** No response is required.
 
-### **EXECUTE ORDERS UPDATE**
+### Execute Orders Update
 
 **Channel:** ws://${HOST}/${EXCHANGE_ID/maker/order/get/update
 
@@ -267,7 +263,7 @@ should only be filled for status 3 or 4.*
 
 **Request:** Once the connection has been established, the exchange can submit update following the schema:
 
-```javascript {.line-numbers}
+```javascript
 {
   "orderID": "1235",
   "symbol": "BTC/USDT"
@@ -285,7 +281,7 @@ should only be filled for status 3 or 4.*
 **Response:**   This web-socket channel will not send a response back unless there is an error 
 reading the submitted update.
 
-```javascript {.line-numbers}
+```javascript
 {
   "failure": {
     "errorType": "Malformed Message" | "Server error"
@@ -294,8 +290,8 @@ reading the submitted update.
   "originalMessage": "the orderbook message sent"
 }
 ```
-### **TESTING ORDERBOOK** 
-To make this test we are working with the tool wscat (is a external tool that aloud us to test web sockets):
+### Testing Orderbook
+To make this test we are working with the tool wscat (is a external tool that allow us to test web sockets):
 
 <https://www.npmjs.com/package/wscat>
 
@@ -319,12 +315,4 @@ terminal and test the Web Socket in every service with this commands lines:
 >wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/maker/order/get
 >
 >wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/order/get/update
-
-
-Please join us in Discord, specifically to our #ceatestnet channel, a place where we will interact with our 
-Exchange community! Here's the invite:
-<https://discord.gg/6xzYRTJGNf>
-
-
-
 
