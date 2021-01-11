@@ -303,22 +303,22 @@ To make this test we are working with the tool wscat (is a external tool that al
 
 >1. Host:  dev-api.cealliance.io
 >2. EXCHANGE_ID: tatis
->3. Header: -H "apikey: 6HsXH94q5cAGy67G"
+>3. Header: -H "apikey: xxxxxxxxx"
 
 Now with all the requisites, we can make our test. For this after we install wscat, we are goin to open a 
 terminal and test the Web Socket in every service with this commands lines:
 
->wscat -H "apikey: 6HsXH94q5cAGy67G" -c ws://dev-api.cealliance.io/tatis/maker/orderbook/set
+>wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/maker/orderbook/set
 >
->wscat -H "apikey: 6HsXH94q5cAGy67G" -c ws://dev-api.cealliance.io/tatis/taker/orderbook/get
+>wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/taker/orderbook/get
 >
->wscat -H "apikey: 6HsXH94q5cAGy67G" -c ws://dev-api.cealliance.io/tatis/taker/order/set
+>wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/taker/order/set
 >
->wscat -H "apikey: 6HsXH94q5cAGy67G" -c ws://dev-api.cealliance.io/tatis/order/set/update
+>wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/order/set/update
 >
->wscat -H "apikey: 6HsXH94q5cAGy67G" -c ws://dev-api.cealliance.io/tatis/maker/order/get
+>wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/maker/order/get
 >
->wscat -H "apikey: 6HsXH94q5cAGy67G" -c ws://dev-api.cealliance.io/tatis/order/get/update
+>wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/order/get/update
 
 
 Please join us in Discord, specifically to our #ceatestnet channel, a place where we will interact with our 
