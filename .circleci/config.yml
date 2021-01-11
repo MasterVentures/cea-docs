@@ -175,5 +175,7 @@ workflows:
             branches:
               only:
                 - main
-          context: cea-gcp
+          context: 
+            - cea-gcp
+            - cea-gcp-prod
           
