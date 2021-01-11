@@ -1,0 +1,21 @@
+site_name: Crypto Exchange Alliance Documentation
+site_url: https://docs.cealliance.io
+repo_url: https://github.com/MasterVentures/cea-docs
+repo_name: GitHub
+edit_uri: edit/master/docs/
+site_description: Crypto Exchange Alliance Documentation
+extra_css:
+    - css/extra.css
+
+theme:
+  name: 'material'
+  favicon: 'img/favicon.ico'
+  feature:
+    tabs: true
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - Support: support.md
