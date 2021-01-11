@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cea-docs
+  labels:
+    app: docs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docs
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: docs
+    spec:
+      containers:
+        - image: gcr.io/vivid-plateau-278712/cea-docs:develop-latest
+          name: docs
+          ports:
+            - containerPort: 80
