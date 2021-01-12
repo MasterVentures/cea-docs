@@ -2,25 +2,25 @@
 
 ## Overview
 
-This document details the behaviour for the order book web-socket service, how to implement its methods 
-and the expected results from the tests. 
+This document details the behaviour of the order book WebSocket service, how to implement its methods and the expected results while making WebSocket requests.
 
 ## Prerequisites
 
-Prior to sending any request to the Orderbook service, the exchange must know the following values:
+Prior to send any request to the Orderbook service, the exchange must know the following values:
 
 **_HOST:_** Publicly accessible hostname.
 
 **_EXCHANGE_ID:_** String specified in the URI to map the exchange interacting with the orderbook endpoints.
 
-**_HEADER:_** Security string that have the type of security and a key provided for the administrator, 
-must be in this form: -H “apikey: xxxxxxxxx”
+**_API Key:_** Key that have the type of security and a key provided by CEA, which must be set as follows : “apikey: xxxxxxxxx”
+
+## Endpoints
 
 ### Set Orderbook
 
 **Channel:** ws://${HOST}/${EXCHANGE_ID/maker/orderbook/set
 
-**Description:** Start a web-socket connection used by the exchange to publish a symbol orderbook.
+**Description:** Start a WebSocket connection used by the exchange to publish a symbol orderbook.
 
 **Request:** 	Once the connection has been established, the exchange can submit the order book message, following the example:
 
@@ -54,7 +54,7 @@ must be in this form: -H “apikey: xxxxxxxxx”
 }
 ```
 
-**Response:** This web-socket channel will not send a response back, unless there is an error reading the submitted order book. 
+**Response:** This WebSocket channel will not send a response back, unless there is an error reading the submitted order book. 
 
 In case of errors expect a response like the following:
 
@@ -72,7 +72,7 @@ In case of errors expect a response like the following:
 
 **Channel:** ws://${HOST}/${EXCHANGE_ID/taker/orderbook/get
 
-**Description:** Start a web-socket connection used by the exchange to receive aggregated orderbook for the specified symbol.
+**Description:** Start a WebSocket connection used by the exchange to receive aggregated orderbook for the specified symbol.
 
 **Request:** Once the connection has been established, the exchange can submit the order book prompt message, following the example:
 
@@ -84,11 +84,11 @@ In case of errors expect a response like the following:
 }
 ```
 
->subscriptionType indicates if the exchange will subscribe to receive updates for the specified symbol.A subscriptionType
->of 1 means it will subscribe to updates and a subscriptionType of 2 means it cancels previous subscriptions for the specified symbol.
+_subscriptionType_ indicates if the exchange will subscribe to receive updates for the specified symbol. A subscriptionType
+of 1 means it will subscribe to updates and a subscriptionType of 2 means it cancels previous subscriptions for the specified symbol.
 
 
-**Response:**   This websocket channel will send updates back to the exchange, including errors:
+**Response:** This WebSocket channel will send updates back to the exchange, including errors:
 
 ```javascript
 {
@@ -131,10 +131,9 @@ In case of errors expect a response like the following:
 
 **Channel:** ws://${HOST}/${EXCHANGE_ID/taker/order/set
 
-**Description:** Start a web-socket connection used by the exchange to submit orders that will be 
-resolved by the aggregated order book.
+**Description:** Start a WebSocket connection used by the exchange to submit orders that will be resolved by the aggregated order book.
 
-**Request:** Once the connection has been established, the exchange can submit orders,following the schema:
+**Request:** Once the connection has been established, the exchange can submit orders, following the schema:
 
 ```javascript
 {
@@ -151,10 +150,9 @@ resolved by the aggregated order book.
 }
 ```
 
-**Response:**   This web-socket channel will not send a response back, unless there is an error 
-reading the submitted order.
+**Response:** This WebSocket channel will not send a response back, unless there is an error reading the submitted order. 
 
->In case of errors expect a response like the following:
+In case of errors expect a response like the following:
 
 ```javascript
 {
@@ -182,9 +180,9 @@ a previously submitted order:
 }
 ```
 
->updateType: 1 for requesting updates, 2 for cancel order.
+_updateType_ 1 for requesting updates, 2 for cancel order.
 
-**Response:**   This web-socket channel will respond synchronous messages  with the update:
+**Response:**   This WebSocket channel will respond synchronous messages  with the update:
 
 ```javascript
 {
@@ -209,28 +207,22 @@ a previously submitted order:
 }
 ```
 
->***status:***
->
->-Order is “new“ status.
->
->-Order rejected
->
->-Order filled
->
->-Order partially filled
->
->-Order cancelled
+_status_
+1. Order is “new“ status.
+2. Order rejected
+3. Order filled
+4. Order partially filled
+5. Order cancelled
 
-*Fields executionId, fillQty, fillPrice, missingQty, execQty, avgPrice, settleDate, transactTime, and currency 
-should only be filled for status 3 or 4.*
+_Fields executionId, fillQty, fillPrice, missingQty, execQty, avgPrice, settleDate, transactTime, and currency should only be filled for status 3 or 4._
 
 
 ### Execute Orders
 
 **Channel:** ws://${HOST}/${EXCHANGE_ID/maker/order/get
 
-**Description:** Start a web-socket connection used by the exchange to receive orders that need to be executed
-accordingly with the submitted order book .
+**Description:** Start a WebSocket connection used by the exchange to receive orders that need to be executed
+accordingly with the submitted order book.
 
 **Request:** Once the connection has been established, the exchange will receive order request, following the schema:
 
@@ -250,18 +242,17 @@ accordingly with the submitted order book .
 }
 ```
 
-*Fields executionId, fillQty, fillPrice, missingQty, >execQty, avgPrice, settleDate,transactTime, and currency 
-should only be filled for status 3 or 4.*
+_Fields executionId, fillQty, fillPrice, missingQty, >execQty, avgPrice, settleDate,transactTime, and currency should only be filled for status 3 or 4._
 
-**Response:** No response is required.
+**Response:** This WebSocket channel will not send a response back.
 
 ### Execute Orders Update
 
 **Channel:** ws://${HOST}/${EXCHANGE_ID/maker/order/get/update
 
-**Description:** Start a web-socket connection used by the to submit order execution updates.
+**Description:** Start a WebSocket connection used by the to submit order execution updates.
 
-**Request:** Once the connection has been established, the exchange can submit update following the schema:
+**Request:** Once the connection has been established, the exchange can submit an update following the schema:
 
 ```javascript
 {
@@ -278,8 +269,7 @@ should only be filled for status 3 or 4.*
 }
 ```
 
-**Response:**   This web-socket channel will not send a response back unless there is an error 
-reading the submitted update.
+**Response:** This WebSocket channel will not send a response back unless there is an error reading the submitted update.
 
 ```javascript
 {
@@ -290,29 +280,15 @@ reading the submitted update.
   "originalMessage": "the orderbook message sent"
 }
 ```
-### Testing Orderbook
-To make this test we are working with the tool wscat (is a external tool that allow us to test web sockets):
+## Testing Orderbook
 
-<https://www.npmjs.com/package/wscat>
+You can use an external tool like [wscat](https://www.npmjs.com/package/wscat) from within your terminal to test out some endpoints.
 
-**Requisites to the Test:**
-
->1. Host:  dev-api.cealliance.io
->2. EXCHANGE_ID: tatis
->3. Header: -H "apikey: xxxxxxxxx"
-
-Now with all the requisites, we can make our test. For this after we install wscat, we are goin to open a 
-terminal and test the Web Socket in every service with this commands lines:
-
->wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/maker/orderbook/set
->
->wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/taker/orderbook/get
->
->wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/taker/order/set
->
->wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/order/set/update
->
->wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/maker/order/get
->
->wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/order/get/update
-
+```bash
+wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/maker/orderbook/set
+wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/taker/orderbook/get
+wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/taker/order/set
+wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/order/set/update
+wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/maker/order/get
+wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/order/get/update
+```
