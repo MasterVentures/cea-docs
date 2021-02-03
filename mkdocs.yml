@@ -18,4 +18,5 @@ plugins:
 
 nav:
   - Home: index.md
+  - Changelog: changelog.md
   - Support: support.md
