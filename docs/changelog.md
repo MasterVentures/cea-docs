@@ -4,11 +4,11 @@ All notable changes to this Crypto Exchange Alliance Microservices will be docum
 
 ## v1.0.0 - 4 February 2021
 
-- Account Dashboard
+* Account Dashboard
     - TBD
-- Orderbook Service
+* Orderbook Service
     - TBD
-- Billing Service 
+* Billing Service 
     - TBD
-- Wallet Service
+* Wallet Service
     - TBD
