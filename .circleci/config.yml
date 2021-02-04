@@ -99,11 +99,8 @@ workflows:
                 - main
                 - develop
                 - cicd-development
-                # Include features branches
                 - /^feature.*/
-                # Include release branches
                 - /^release.*/
-                # Include hotfix branches
                 - /^hotfix.*/
           context: 
             - cea-gcp
@@ -116,11 +113,8 @@ workflows:
               only:
                 - main
                 - develop
-                # Include features branches
                 - /^feature.*/
-                # Include release branches
                 - /^release.*/
-                # Include hotfix branches
                 - /^hotfix.*/
           context: 
             - cea-gcp
@@ -131,11 +125,8 @@ workflows:
               only:
                 - main
                 - develop
-                # Include features branches
                 - /^feature.*/
-                # Include release branches
                 - /^release.*/
-                # Include hotfix branches
                 - /^hotfix.*/
           requires:
             - publish
@@ -146,11 +137,8 @@ workflows:
               only:
                 - main
                 - develop
-                # Include features branches
                 - /^feature.*/
-                # Include release branches
                 - /^release.*/
-                # Include hotfix branches
                 - /^hotfix.*/
           requires:
             - publish
@@ -161,11 +149,8 @@ workflows:
             branches:
               only:
                 - develop
-                # Include features branches
                 - /^feature.*/
-                # Include release branches
                 - /^release.*/
-                # Include hotfix branches
                 - /^hotfix.*/
           context: cea-gcp
       - deploy-prod:
