@@ -285,10 +285,10 @@ _Fields executionId, fillQty, fillPrice, missingQty, >execQty, avgPrice, settleD
 You can use an external tool like [wscat](https://www.npmjs.com/package/wscat) from within your terminal to test out some endpoints.
 
 ```bash
-wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/maker/orderbook/set
-wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/taker/orderbook/get
-wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/taker/order/set
-wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/order/set/update
-wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/maker/order/get
-wscat -H "apikey: xxxxxxxxx" -c ws://dev-api.cealliance.io/tatis/order/get/update
+wscat -H "apikey: xxxxxxxxx" -c wss://dev-api.cealliance.io/tatis/maker/orderbook/set
+wscat -H "apikey: xxxxxxxxx" -c wss://dev-api.cealliance.io/tatis/taker/orderbook/get
+wscat -H "apikey: xxxxxxxxx" -c wss://dev-api.cealliance.io/tatis/taker/order/set
+wscat -H "apikey: xxxxxxxxx" -c wss://dev-api.cealliance.io/tatis/order/set/update
+wscat -H "apikey: xxxxxxxxx" -c wss://dev-api.cealliance.io/tatis/maker/order/get
+wscat -H "apikey: xxxxxxxxx" -c wss://dev-api.cealliance.io/tatis/order/get/update
 ```
