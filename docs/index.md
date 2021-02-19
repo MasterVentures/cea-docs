@@ -18,7 +18,7 @@ Prior to send any request to the Orderbook service, the exchange must know the f
 
 ### Set Orderbook
 
-**Channel:** ws://${HOST}/${EXCHANGE_ID/maker/orderbook/set
+**Channel:** wss:///${HOST}/${EXCHANGE_ID/maker/orderbook/set
 
 **Description:** Start a WebSocket connection used by the exchange to publish a symbol orderbook.
 
@@ -70,7 +70,7 @@ In case of errors expect a response like the following:
 
 ### Get aggregated Orderbook
 
-**Channel:** ws://${HOST}/${EXCHANGE_ID/taker/orderbook/get
+**Channel:** wss:///${HOST}/${EXCHANGE_ID/taker/orderbook/get
 
 **Description:** Start a WebSocket connection used by the exchange to receive aggregated orderbook for the specified symbol.
 
@@ -129,7 +129,7 @@ of 1 means it will subscribe to updates and a subscriptionType of 2 means it can
 
 ### Submit New Orders
 
-**Channel:** ws://${HOST}/${EXCHANGE_ID/taker/order/set
+**Channel:** wss:///${HOST}/${EXCHANGE_ID/taker/order/set
 
 **Description:** Start a WebSocket connection used by the exchange to submit orders that will be resolved by the aggregated order book.
 
@@ -164,7 +164,7 @@ In case of errors expect a response like the following:
 
 ### Order Updates
 
-**Channel:** ws://${HOST}/${EXCHANGE_ID/taker/order/set/update
+**Channel:** wss:///${HOST}/${EXCHANGE_ID/taker/order/set/update
 
 **Description:** This channel allows an exchange to submit update or cancel request for active orders. 
 
@@ -219,7 +219,7 @@ _Fields executionId, fillQty, fillPrice, missingQty, execQty, avgPrice, settleDa
 
 ### Execute Orders
 
-**Channel:** ws://${HOST}/${EXCHANGE_ID/maker/order/get
+**Channel:** wss:///${HOST}/${EXCHANGE_ID/maker/order/get
 
 **Description:** Start a WebSocket connection used by the exchange to receive orders that need to be executed
 accordingly with the submitted order book.
@@ -248,7 +248,7 @@ _Fields executionId, fillQty, fillPrice, missingQty, >execQty, avgPrice, settleD
 
 ### Execute Orders Update
 
-**Channel:** ws://${HOST}/${EXCHANGE_ID/maker/order/get/update
+**Channel:** wss:///${HOST}/${EXCHANGE_ID/maker/order/get/update
 
 **Description:** Start a WebSocket connection used by the to submit order execution updates.
 
