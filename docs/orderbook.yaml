@@ -1,0 +1,43 @@
+asyncapi: 2.0.0
+info:
+  title: CEA Orderbook API
+  version: '1.0.0'
+components:
+  schemas:
+    equi:
+      type: object
+      properties:
+        price:
+          type: string
+          description: price of bid or ask
+          minLength: 1
+          example: "1400.00"
+        qty:
+          type: integer
+          description: total bid or ask for this price
+          example: 2300
+
+channels:
+  maker/orderbook/set:
+    publish:
+      summary: Exchanges can use this channel to stream symbols orderbook
+      message:
+        name: "orderbook"
+        title: "Orderbook"
+        summary: "Current asks and bids for the specified symbol"
+        payload:
+          type: object
+          properties:
+            symbol:
+              type: string
+              minimum: 6
+              description: pair symbol
+              example: "ETHBTC"
+            bids:
+              type: array
+              items:
+                $ref: "#/components/schemas/equi"
+            asks:
+              type: array
+              items:
+                $ref: "#/components/schemas/equi"
