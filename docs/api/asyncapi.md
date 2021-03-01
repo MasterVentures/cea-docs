@@ -50,4 +50,30 @@
 
 
 
+#### `subscribe` Operation
+
+*When there are errors in the Orderbook message, this channel will return an error*
+
+##### Message
+
+*When something's wrong with the Orderbook message*
+
+###### Payload
+
+| Name | Type | Description | Accepted values |
+|-|-|-|-|
+| failure | string | type of error been throw | Malformed Message, Server error |
+| err | string | posible cause of the error | _Any_ |
+
+> Examples of payload _(generated)_
+
+```json
+{
+  "failure": "Malformed Message",
+  "err": "Validation error, field 'symbol' is required"
+}
+```
+
+
+
 

@@ -41,3 +41,22 @@ channels:
               type: array
               items:
                 $ref: "#/components/schemas/equi"
+    subscribe:
+      summary: When there are errors in the Orderbook message, this channel will return an error
+      message:
+        name: "orderbook error"
+        title: "Orderbook Error"
+        summary: "When something's wrong with the Orderbook message"
+        payload:
+          type: object
+          properties:
+            failure:
+              type: string
+              description: "type of error been throw"
+              enum:
+                - "Malformed Message"
+                - "Server error"
+            err:
+              type: string
+              description: "posible cause of the error"
+              example: "Validation error, field 'symbol' is required"
