@@ -79,7 +79,7 @@
 
 ### **taker/orderbook/get** Channel
 
-#### `subscribe` Operation
+#### `publish` Operation
 
 *Start a WebSocket connection used by the exchange to receive aggregated orderbook for the specified symbol*
 
@@ -102,6 +102,60 @@
   "symbol": "ETHBTC",
   "depth": 6,
   "subscriptionType": 1
+}
+```
+
+
+
+#### `subscribe` Operation
+
+##### Message
+
+*Aggregated result for the specified symbol*
+
+###### Payload
+
+| Name | Type | Description | Accepted values |
+|-|-|-|-|
+| responseType | integer | 1 - Orderbook update. 2 - Request error. | 1, 2 |
+| err | oneOf | this will be null in case there are no error | _Any_ |
+| err.0 | object | - | _Any_ |
+| err.0.prompt | string | original message submited to channel | _Any_ |
+| err.0.reason | string | description of error | _Any_ |
+| err.1 | null | - | _Any_ |
+| book | object | - | _Any_ |
+| book.symbol | string | pair symbol | _Any_ |
+| book.bids | arrayobject | - | _Any_ |
+| book.bids.price | string | price of bid or ask | _Any_ |
+| book.bids.qty | integer | total bid or ask for this price | _Any_ |
+| book.asks | arrayobject | - | _Any_ |
+| book.asks.price | string | price of bid or ask | _Any_ |
+| book.asks.qty | integer | total bid or ask for this price | _Any_ |
+
+> Examples of payload _(generated)_
+
+```json
+{
+  "responseType": 1,
+  "err": {
+    "prompt": "{asks: '',bids: '', symbol: ''}",
+    "reason": "field symbol can't be blank"
+  },
+  "book": {
+    "symbol": "ETHBTC",
+    "bids": [
+      {
+        "price": "1400.00",
+        "qty": 2300
+      }
+    ],
+    "asks": [
+      {
+        "price": "1400.00",
+        "qty": 2300
+      }
+    ]
+  }
 }
 ```
 

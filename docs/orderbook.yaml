@@ -18,6 +18,39 @@ components:
           description: total bid or ask for this price
           example: 2300
 
+    orderbook:
+      required:
+        -  symbol
+        -  bids
+        -  asks
+      type: object
+      properties:
+        symbol:
+          type: string
+          minLength: 6
+          description: pair symbol
+          example: "ETHBTC"
+        bids:
+          type: array
+          items:
+            $ref: "#/components/schemas/equi"
+        asks:
+          type: array
+          items:
+            $ref: "#/components/schemas/equi"
+
+    requestResponseError:
+      type: object
+      properties:
+        prompt:
+          type: string
+          description: "original message submited to channel"
+          example: "{asks: '',bids: '', symbol: ''}"
+        reason:
+          type: string
+          description: "description of error"
+          example: "field symbol can't be blank"
+
 channels:
   maker/orderbook/set:
     publish:
@@ -27,25 +60,8 @@ channels:
         title: "Orderbook"
         summary: "Current asks and bids for the specified symbol"
         payload:
-          required:
-            -  symbol
-            -  bids
-            -  asks
-          type: object
-          properties:
-            symbol:
-              type: string
-              minLength: 6
-              description: pair symbol
-              example: "ETHBTC"
-            bids:
-              type: array
-              items:
-                $ref: "#/components/schemas/equi"
-            asks:
-              type: array
-              items:
-                $ref: "#/components/schemas/equi"
+          $ref: "#/components/schemas/orderbook"
+
     subscribe:
       summary: When there are errors in the Orderbook message, this channel will return an error
       message:
@@ -67,7 +83,7 @@ channels:
               example: "Validation error, field 'symbol' is required"
 
   taker/orderbook/get:
-    subscribe:
+    publish:
       summary: "Start a WebSocket connection used by the exchange to receive aggregated orderbook for the specified symbol"
       message:
         name: "orderbook response"
@@ -98,3 +114,27 @@ channels:
               enum:
                 -  1
                 -  2
+    subscribe:
+      message:
+        name: "aggregated orderbook"
+        title: "Aggregater Orderbook"
+        summary: "Aggregated result for the specified symbol"
+        payload:
+          type: object
+          properties:
+            responseType:
+              type: integer
+              description: >
+                1 - Orderbook update.
+                2 - Request error.
+              enum:
+                -  1
+                -  2
+            err:
+              description: "this will be null in case there are no error"
+              oneOf:
+                - $ref: "#/components/schemas/requestResponseError"
+                - type: "null"
+            book:
+              $ref: "#/components/schemas/orderbook"
+
