@@ -2,6 +2,7 @@ asyncapi: 2.0.0
 info:
   title: CEA Orderbook API
   version: '1.0.0'
+defaultContentType: "application/json"
 components:
   schemas:
     equi:
@@ -26,11 +27,15 @@ channels:
         title: "Orderbook"
         summary: "Current asks and bids for the specified symbol"
         payload:
+          required:
+            -  symbol
+            -  bids
+            -  asks
           type: object
           properties:
             symbol:
               type: string
-              minimum: 6
+              minLength: 6
               description: pair symbol
               example: "ETHBTC"
             bids:
@@ -60,3 +65,36 @@ channels:
               type: string
               description: "posible cause of the error"
               example: "Validation error, field 'symbol' is required"
+
+  taker/orderbook/get:
+    subscribe:
+      summary: "Start a WebSocket connection used by the exchange to receive aggregated orderbook for the specified symbol"
+      message:
+        name: "orderbook response"
+        title: "Orderbook Reponse"
+        summary: "Aggregated orderbook for a symbol"
+        payload:
+          type: object
+          required:
+            -  symbol
+            -  depth
+            -  subscriptionType
+          properties:
+            symbol:
+              type: string
+              minLength: 6
+              description: pair symbol
+              example: "ETHBTC"
+            depth:
+              type: integer
+              minimum: 0
+              example: 6
+              description: order book depth, a depth of 0 means full book
+            subscriptionType:
+              type: integer
+              description: >
+                1 - To subscribe to aggregated orderbook for the specified symbol.
+                2 - To unsubscribe or request once
+              enum:
+                -  1
+                -  2

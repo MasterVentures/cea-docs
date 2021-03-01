@@ -77,3 +77,34 @@
 
 
 
+### **taker/orderbook/get** Channel
+
+#### `subscribe` Operation
+
+*Start a WebSocket connection used by the exchange to receive aggregated orderbook for the specified symbol*
+
+##### Message
+
+*Aggregated orderbook for a symbol*
+
+###### Payload
+
+| Name | Type | Description | Accepted values |
+|-|-|-|-|
+| symbol | string | pair symbol | _Any_ |
+| depth | integer | order book depth, a depth of 0 means full book | _Any_ |
+| subscriptionType | integer | 1 - To subscribe to aggregated orderbook for the specified symbol. 2 - To unsubscribe or request once | 1, 2 |
+
+> Examples of payload _(generated)_
+
+```json
+{
+  "symbol": "ETHBTC",
+  "depth": 6,
+  "subscriptionType": 1
+}
+```
+
+
+
+
