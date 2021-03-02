@@ -51,6 +51,66 @@ components:
           description: "description of error"
           example: "field symbol can't be blank"
 
+    orderUpdate:
+      type: object
+      required:
+      - orderID
+      - status
+      - executionID
+      properties:
+        orderID:
+          type: string
+          description: "OrderID is a unique alphanumemric identifier for the order."
+          example: "49a58c4c-7b43"
+        status:
+          type: integer
+          description: >
+            1 - Order Created.
+            2 - Order Rejected.
+            3 - Order Filled.
+            4 - Order Partially Filled.
+            5 - Order Cancelled.
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+        executionID:
+          type: string
+          description: "unique alphanumeric id"
+          example: "2s3s56"
+        fillQty:
+          type: string
+          format: float
+          description: for status 3 or 4, the size of the fill
+          example: "50.00"
+        fillPrice:
+          type: string
+          description: "price used for this fill"
+          example: "0.2521"
+        missingQty:
+          type: string
+          description: "missing quantity from the order"
+          example: "25.50"
+        execQty:
+          type: string
+          description: "executed quantity across all fills"
+          example: "30.00"
+        avgPrice:
+          type: string
+          description: "Average price for the executed fills"
+          example: "0.36"
+        settleDate:
+          type: string
+          description: "date of the fill, don't use hyphens backslash or any other separator"
+          format: "yyyymmdd"
+          example: "20091110"
+        transactTime:
+          type: integer
+          description: "timestamp of the update"
+          example: 1614682480
+
 channels:
   maker/orderbook/set:
     publish:
@@ -205,7 +265,7 @@ channels:
               description: "How much the fill price can deviate from the order price."
               format: float
               example: "0.02"
-    
+
     subscribe:
       message:
         name: "Neworder request error."
@@ -227,7 +287,14 @@ channels:
               type: string
               description: "Description of error."
               example: "field orderQty does not contain a numeric value"
-          
-  
+
+  taker/order/set/update:
+    subscribe:
+      message:
+        name: "Order update"
+        title: "Order Update"
+        summary: "This channel allows an exchange to submit update or cancel request for active orders."
+        payload:
+          $ref: "#/components/schemas/orderUpdate"
 
 
