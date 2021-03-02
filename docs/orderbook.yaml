@@ -65,6 +65,72 @@ components:
           description: "description of error"
           example: "field symbol can't be blank"
 
+    newOrder:
+      type: object
+      required:
+        -  orderID
+        -  symbol
+        -  orderSide
+        -  orderType
+        -  timeStamp
+      properties:
+        orderID:
+          type: string
+          description: "OrderID is a unique alphanumemric identifier for the order."
+          example: "49a58c4c-7b43"
+        symbol:
+          type: string
+          minLength: 6
+          description: order symbol
+          example: "ETHBTC"
+        orderSide:
+          type: integer
+          description: >
+            1 - Buy Order
+            2 - Sell Order
+          enum:
+            - 1
+            - 2
+        orderType:
+          type: integer
+          description: >
+            1 - Market Order
+            2 - Limit Order
+            3 - Stop Order
+          enum:
+            - 1
+            - 2
+            - 3
+        orderQty:
+          type: string
+          description: "Decimal quantity of the order."
+          format: float
+          example: "0.56"
+        price:
+          type: string
+          description: "Required for Limit or Stop orders."
+          format: float
+          example: "2.56"
+        minQty:
+          type: string
+          description: "Minimum fill size for the oder."
+          format: float
+          example: "0.5"
+        timeStamp:
+          type: integer
+          format: int64
+          description: "Epoc time of the order"
+          example: 1614682480
+        priceDeviation:
+          type: string
+          description: "How much the fill price can deviate from the order price."
+          format: float
+          example: "0.02"
+        currency:
+          type: string
+          description: "Applies only for makers receiving new orders from CEA"
+          example: "BTC"
+
     orderUpdate:
       type: object
       required:
@@ -208,66 +274,7 @@ channels:
         title: "New Order"
         summary: "Start a WebSocket connection used by the exchange to submit orders that will be resolved by the aggregated order book"
         payload:
-          type: object
-          required:
-            -  orderID
-            -  symbol
-            -  orderSide
-            -  orderType
-            -  timeStamp
-          properties:
-            orderID:
-              type: string
-              description: "OrderID is a unique alphanumemric identifier for the order."
-              example: "49a58c4c-7b43"
-            symbol:
-              type: string
-              minLength: 6
-              description: order symbol
-              example: "ETHBTC"
-            orderSide:
-              type: integer
-              description: >
-                1 - Buy Order
-                2 - Sell Order
-              enum:
-                - 1
-                - 2
-            orderType:
-              type: integer
-              description: >
-                1 - Market Order
-                2 - Limit Order
-                3 - Stop Order
-              enum:
-                - 1
-                - 2
-                - 3
-            orderQty:
-              type: string
-              description: "Decimal quantity of the order."
-              format: float
-              example: "0.56"
-            price:
-              type: string
-              description: "Required for Limit or Stop orders."
-              format: float
-              example: "2.56"
-            minQty:
-              type: string
-              description: "Minimum fill size for the oder."
-              format: float
-              example: "0.5"
-            timeStamp:
-              type: integer
-              format: int64
-              description: "Epoc time of the order"
-              example: 1614682480
-            priceDeviation:
-              type: string
-              description: "How much the fill price can deviate from the order price."
-              format: float
-              example: "0.02"
+          $ref: "#/components/schemas/newOrder"
 
     subscribe:
       message:
@@ -299,6 +306,16 @@ channels:
         summary: "This channel allows an exchange to submit update or cancel request for active orders."
         payload:
           $ref: "#/components/schemas/orderUpdate"
+
+  maker/order/get:
+    subscribe:
+      message:
+        name: "Get Order"
+        title: "Get Order"
+        summary: "Start a WebSocket connection used by the exchange to receive orders that need to be executed accordingly with the submitted order book."
+        payload:
+          $ref: "#/components/schemas/newOrder"
+
 
   maker/order/get/update:
     publish:
