@@ -1,8 +1,24 @@
 # CEA Orderbook API 1.0.0 documentation
 
+This document details the behaviour of the order book WebSocket service, how to implement its methods and the expected results while making WebSocket requests.
 ## Table of Contents
 
+* [Servers](#servers)
 * [Channels](#channels)
+
+## Servers
+
+### **development** Server
+
+| URL | Protocol | Description |
+|-|-|-|
+| https://dev-api.cealliance.io/your-exchange-id/ | https | Development instance |
+
+#### Security Requirements
+
+| Type | In | Name | Scheme | Format | Description |
+|-|-|-|-|-|-|
+| apiKey | user | - | - | - | All request to the API require an API_KEY header containing the provided apikey |
 
 ## Channels
 
@@ -10,11 +26,9 @@
 
 #### `publish` Operation
 
-*Exchanges can use this channel to stream symbols orderbook*
-
 ##### Message
 
-*Current asks and bids for the specified symbol*
+*Exchanges can use this channel to stream symbols orderbook*
 
 ###### Payload
 
@@ -52,11 +66,9 @@
 
 #### `subscribe` Operation
 
-*When there are errors in the Orderbook message, this channel will return an error*
-
 ##### Message
 
-*When something's wrong with the Orderbook message*
+*When there are errors in the Orderbook message, this channel will return an error.*
 
 ###### Payload
 
@@ -81,11 +93,9 @@
 
 #### `publish` Operation
 
-*Start a WebSocket connection used by the exchange to receive aggregated orderbook for the specified symbol*
-
 ##### Message
 
-*Aggregated orderbook for a symbol*
+*Start a WebSocket connection used by the exchange to receive aggregated orderbook for the specified symbol*
 
 ###### Payload
 

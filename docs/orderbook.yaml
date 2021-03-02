@@ -1,9 +1,22 @@
 asyncapi: 2.0.0
 info:
-  title: CEA Orderbook API
+  title: "CEA Orderbook API"
   version: '1.0.0'
+  description: "This document details the behaviour of the order book WebSocket service, how to implement its methods and the expected results while making WebSocket requests."
+servers:
+  development:
+    url: "https://dev-api.cealliance.io/your-exchange-id/"
+    protocol: https
+    security:
+      - api-keys: []
+    description: "Development instance"
 defaultContentType: "application/json"
 components:
+  securitySchemes:
+    api-keys:
+      type: apiKey
+      in: user
+      description: "All request to the API require an API_KEY header containing the provided apikey"
   schemas:
     equi:
       type: object
@@ -194,30 +207,27 @@ components:
 channels:
   maker/orderbook/set:
     publish:
-      summary: Exchanges can use this channel to stream symbols orderbook
       message:
         name: "orderbook"
         title: "Orderbook"
-        summary: "Current asks and bids for the specified symbol"
+        summary: "Exchanges can use this channel to stream symbols orderbook"
         payload:
           $ref: "#/components/schemas/orderbook"
 
     subscribe:
-      summary: When there are errors in the Orderbook message, this channel will return an error
       message:
         name: "orderbook error"
         title: "Orderbook Error"
-        summary: "When something's wrong with the Orderbook message"
+        summary: "When there are errors in the Orderbook message, this channel will return an error."
         payload:
           $ref: "#/components/schemas/requestErrorMsg"
 
   taker/orderbook/get:
     publish:
-      summary: "Start a WebSocket connection used by the exchange to receive aggregated orderbook for the specified symbol"
       message:
         name: "orderbook response"
         title: "Orderbook Reponse"
-        summary: "Aggregated orderbook for a symbol"
+        summary: "Start a WebSocket connection used by the exchange to receive aggregated orderbook for the specified symbol"
         payload:
           type: object
           required:
