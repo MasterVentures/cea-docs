@@ -39,6 +39,20 @@ components:
           items:
             $ref: "#/components/schemas/equi"
 
+    requestErrorMsg:
+      type: object
+      properties:
+        failure:
+          type: string
+          description: "type of error been throw"
+          enum:
+            - "Malformed Message"
+            - "Server error"
+        err:
+          type: string
+          description: "posible cause of the error"
+          example: "Validation error, field 'symbol' is required"
+
     requestResponseError:
       type: object
       properties:
@@ -129,18 +143,7 @@ channels:
         title: "Orderbook Error"
         summary: "When something's wrong with the Orderbook message"
         payload:
-          type: object
-          properties:
-            failure:
-              type: string
-              description: "type of error been throw"
-              enum:
-                - "Malformed Message"
-                - "Server error"
-            err:
-              type: string
-              description: "posible cause of the error"
-              example: "Validation error, field 'symbol' is required"
+          $ref: "#/components/schemas/requestErrorMsg"
 
   taker/orderbook/get:
     publish:
@@ -291,10 +294,26 @@ channels:
   taker/order/set/update:
     subscribe:
       message:
-        name: "Order update"
-        title: "Order Update"
+        name: "Get order update"
+        title: "Get Order Update"
         summary: "This channel allows an exchange to submit update or cancel request for active orders."
         payload:
           $ref: "#/components/schemas/orderUpdate"
 
+  maker/order/get/update:
+    publish:
+      message:
+        name: "Set order update"
+        title: "Set Order Update"
+        summary: "Start a WebSocket connection used by the to submit order execution updates."
+        payload:
+          $ref: "#/components/schemas/orderUpdate"
+
+    subscribe:
+      message:
+        name: "Order update error"
+        title: "Order update error"
+        summary: "This chanel will not return messages unless there is an error with the order update"
+        payload:
+          $ref: "#/components/schemas/requestErrorMsg"
 
