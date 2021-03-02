@@ -105,7 +105,7 @@ channels:
               type: integer
               minimum: 0
               example: 6
-              description: order book depth, a depth of 0 means full book
+              description: "order book depth, a depth of 0 means full book."
             subscriptionType:
               type: integer
               description: >
@@ -137,4 +137,72 @@ channels:
                 - type: "null"
             book:
               $ref: "#/components/schemas/orderbook"
+
+  taker/order/set:
+    publish:
+      message:
+        name: "New Order"
+        title: "New Order"
+        summary: "Start a WebSocket connection used by the exchange to submit orders that will be resolved by the aggregated order book"
+        payload:
+          type: object
+          required:
+            -  orderID
+            -  symbol
+            -  orderSide
+            -  orderType
+            -  timeStamp
+          properties:
+            orderID:
+              type: string
+              description: "OrderID is a unique alphanumemric identifier for the order."
+              example: "49a58c4c-7b43"
+            symbol:
+              type: string
+              minLength: 6
+              description: order symbol
+              example: "ETHBTC"
+            orderSide:
+              type: integer
+              description: >
+                1 - Buy Order
+                2 - Sell Order
+              enum:
+                - 1
+                - 2
+            orderType:
+              type: integer
+              description: >
+                1 - Market Order
+                2 - Limit Order
+                3 - Stop Order
+              enum:
+                - 1
+                - 2
+                - 3
+            orderQty:
+              type: string
+              description: "Decimal quantity of the order."
+              format: float
+              example: "0.56"
+            price:
+              type: string
+              description: "Required for Limit or Stop orders."
+              format: float
+              example: "2.56"
+            minQty:
+              type: string
+              description: "Minimum fill size for the oder."
+              format: float
+              example: "0.5"
+            timeStamp:
+              type: integer
+              format: int64
+              description: "Epoc time of the order"
+              example: 1614682480
+            priceDeviation:
+              type: string
+              description: "How much the fill price can deviate from the order price."
+              format: float
+              example: "0.02"
 

@@ -92,7 +92,7 @@
 | Name | Type | Description | Accepted values |
 |-|-|-|-|
 | symbol | string | pair symbol | _Any_ |
-| depth | integer | order book depth, a depth of 0 means full book | _Any_ |
+| depth | integer | order book depth, a depth of 0 means full book. | _Any_ |
 | subscriptionType | integer | 1 - To subscribe to aggregated orderbook for the specified symbol. 2 - To unsubscribe or request once | 1, 2 |
 
 > Examples of payload _(generated)_
@@ -156,6 +156,47 @@
       }
     ]
   }
+}
+```
+
+
+
+
+### **taker/order/set** Channel
+
+#### `publish` Operation
+
+##### Message
+
+*Start a WebSocket connection used by the exchange to submit orders that will be resolved by the aggregated order book*
+
+###### Payload
+
+| Name | Type | Description | Accepted values |
+|-|-|-|-|
+| orderID | string | OrderID is a unique alphanumemric identifier for the order. | _Any_ |
+| symbol | string | order symbol | _Any_ |
+| orderSide | integer | 1 - Buy Order 2 - Sell Order | 1, 2 |
+| orderType | integer | 1 - Market Order 2 - Limit Order 3 - Stop Order | 1, 2, 3 |
+| orderQty | string | Decimal quantity of the order. | _Any_ |
+| price | string | Required for Limit or Stop orders. | _Any_ |
+| minQty | string | Minimum fill size for the oder. | _Any_ |
+| timeStamp | integer | Epoc time of the order | _Any_ |
+| priceDeviation | string | How much the fill price can deviate from the order price. | _Any_ |
+
+> Examples of payload _(generated)_
+
+```json
+{
+  "orderID": "49a58c4c-7b43",
+  "symbol": "ETHBTC",
+  "orderSide": 1,
+  "orderType": 1,
+  "orderQty": "0.56",
+  "price": "2.56",
+  "minQty": "0.5",
+  "timeStamp": 1614682480,
+  "priceDeviation": "0.02"
 }
 ```
 
