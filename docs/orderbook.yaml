@@ -205,4 +205,29 @@ channels:
               description: "How much the fill price can deviate from the order price."
               format: float
               example: "0.02"
+    
+    subscribe:
+      message:
+        name: "Neworder request error."
+        title: "New Order Request Error"
+        summary: "This channel will not return any response, unless there is an error with a submited Order."
+        payload:
+          type: object
+          properties:
+            originalMessage:
+              type: string
+              description: "Original submited order message"
+              example: '{"orderID": "2541a-52as5-1as25", "orderQty": "a"}'
+            errorType:
+              type: string
+              enum:
+                - "NEW ORDER REQUEST: Malformed Request"
+                - "NEW ORDER REQUEST: Server Error"
+            errorMessage:
+              type: string
+              description: "Description of error."
+              example: "field orderQty does not contain a numeric value"
+          
+  
+
 

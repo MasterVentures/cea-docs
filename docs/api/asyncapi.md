@@ -202,4 +202,30 @@
 
 
 
+#### `subscribe` Operation
+
+##### Message
+
+*This channel will not return any response, unless there is an error with a submited Order.*
+
+###### Payload
+
+| Name | Type | Description | Accepted values |
+|-|-|-|-|
+| originalMessage | string | Original submited order message | _Any_ |
+| errorType | string | - | NEW ORDER REQUEST: Malformed Request, NEW ORDER REQUEST: Server Error |
+| errorMessage | string | Description of error. | _Any_ |
+
+> Examples of payload _(generated)_
+
+```json
+{
+  "originalMessage": "{\"orderID\": \"2541a-52as5-1as25\", \"orderQty\": \"a\"}",
+  "errorType": "NEW ORDER REQUEST: Malformed Request",
+  "errorMessage": "field orderQty does not contain a numeric value"
+}
+```
+
+
+
 
