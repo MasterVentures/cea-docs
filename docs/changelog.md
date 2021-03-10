@@ -42,6 +42,7 @@ All notable changes to this Crypto Exchange Alliance Microservices will be docum
     - API Rest To recover the Metrics from a date Periods for every Symbol
     - Schelude "Tasker" to execute operations in case of fail the withdraws or connections to wallet service
     - Storage and control of tracer of Transactions executed, and record all logs of response from wallet service in every transactions leg
+    - Creation Queries MongoDB Pipelines, to grouping transactions left in a filtered list to optimized the Tasker function                
 * Wallet Service
     - Connector with Transport HTTP and SDK with provider Copper
     - Executions of Withdraws
