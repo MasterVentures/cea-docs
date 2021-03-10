@@ -32,6 +32,21 @@ All notable changes to this Crypto Exchange Alliance Microservices will be docum
         - XRPLTC
     - Websocket streaming API
 * Billing Service 
-    - TBD
+    - Connector Dropcopy GiveUp Stream Orders from Provider
+    - Serializer and backup all operations in data lake 
+    - Generator of tracers operations from orders and sub orders legs
+    - Executions  Wallet Service
+        - Withdraws operations                
+        - Verified balances operations               
+    - Managements of Commissions and controls rates for exchanges
+    - API Rest To recover the Metrics from a date Periods for every Symbol
+    - Schelude "Tasker" to execute operations in case of fail the withdraws or connections to wallet service
+    - Storage and control of tracer of Transactions executed, and record all logs of response from wallet service in every transactions leg
 * Wallet Service
-    - TBD
+    - Connector with Transport HTTP and SDK with provider Copper
+    - Executions of Withdraws
+    - Recover Wallets from Portfolios
+    - Recover Operations of Transactions
+    - Control and managements of wallets per portfolio
+    - Creation of SHAMIR - Preshared Key to withdraws to Custodians in KYC3 Process
+    - API REST for operations (Withdraws Internal and External, Account)
