@@ -44,10 +44,11 @@ All notable changes to this Crypto Exchange Alliance Microservices will be docum
     - Storage and control of tracer of Transactions executed, and record all logs of response from wallet service in every transactions leg
     - Creation Queries MongoDB Pipelines, to grouping transactions left in a filtered list to optimized the Tasker function                
 * Wallet Service
-    - Connector with Transport HTTP and SDK with provider Copper
-    - Executions of Withdraws
-    - Recover Wallets from Portfolios
-    - Recover Operations of Transactions
-    - Control and managements of wallets per portfolio
-    - Creation of SHAMIR - Preshared Key to withdraws to Custodians in KYC3 Process
-    - API REST for operations (Withdraws Internal and External, Account)
+    - SDK with provider Copper
+    - Control and managements of wallets per Exchange
+    - Movement Funds Between Exchanges (internal withdrawals)
+    - Custody Funds System For External Withdrawals Per Exchange
+        - Request External Withdrawals and distribuite Shamir Secret Sharing Key According Custodial Configuration
+        - Approve External Withdrawals Per Custodian
+        - Reject External Withdrawals Per Custodian
+    - API REST Transport
