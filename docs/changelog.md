@@ -45,6 +45,9 @@ All notable changes to this Crypto Exchange Alliance Microservices will be docum
     - Creation Queries MongoDB Pipelines, to grouping transactions left in a filtered list to optimized the Tasker function                
 * Wallet Service
     - SDK with provider Copper
+    - Create New Exchange Account Endpoint
+        - Create Copper Portfolio
+        - Active Wallets
     - Control and managements of wallets per Exchange
     - Movement Funds Between Exchanges (internal withdrawals)
     - Custody Funds System For External Withdrawals Per Exchange
