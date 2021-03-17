@@ -4,8 +4,6 @@ All notable changes to this Crypto Exchange Alliance Microservices will be docum
 
 ## v1.0.0 - 4 February 2021
 
-* Account Dashboard
-    - TBD
 * Orderbook Service
     - Centralized Orderbook aggregation based on participants.
     - Initial support for market, limit and stop trades.
