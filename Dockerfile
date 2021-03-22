@@ -5,7 +5,8 @@ RUN pip install regex mkdocs mkdocs-material
 # Set the working directory
 WORKDIR /app
 # Copy source docs
-COPY . .
+COPY docs docs
+COPY mkdocs.yml .
 # Buil the site
 RUN mkdocs build
 

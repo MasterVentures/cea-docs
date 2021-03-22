@@ -1,0 +1,346 @@
+asyncapi: 2.0.0
+info:
+  title: "CEA Orderbook API"
+  version: '1.0.0'
+  description: "This document details the behaviour of the order book WebSocket service, how to implement its methods and the expected results while making WebSocket requests."
+servers:
+  development:
+    url: "https://dev-api.cealliance.io/your-exchange-id/"
+    protocol: https
+    security:
+      - api-keys: []
+    description: "Development instance"
+defaultContentType: "application/json"
+components:
+  securitySchemes:
+    api-keys:
+      type: apiKey
+      in: user
+      description: "All request to the API require an API_KEY header containing the provided apikey"
+  schemas:
+    equi:
+      type: object
+      properties:
+        price:
+          type: string
+          description: price of bid or ask
+          minLength: 1
+          example: "1400.00"
+        qty:
+          type: integer
+          description: total bid or ask for this price
+          example: 2300
+
+    orderbook:
+      required:
+        -  symbol
+        -  bids
+        -  asks
+      type: object
+      properties:
+        symbol:
+          type: string
+          minLength: 6
+          description: pair symbol
+          example: "ETHBTC"
+        bids:
+          type: array
+          items:
+            $ref: "#/components/schemas/equi"
+        asks:
+          type: array
+          items:
+            $ref: "#/components/schemas/equi"
+
+    requestErrorMsg:
+      type: object
+      properties:
+        failure:
+          type: string
+          description: "type of error been throw"
+          enum:
+            - "Malformed Message"
+            - "Server error"
+        err:
+          type: string
+          description: "posible cause of the error"
+          example: "Validation error, field 'symbol' is required"
+
+    requestResponseError:
+      type: object
+      properties:
+        prompt:
+          type: string
+          description: "original message submited to channel"
+          example: "{asks: '',bids: '', symbol: ''}"
+        reason:
+          type: string
+          description: "description of error"
+          example: "field symbol can't be blank"
+
+    newOrder:
+      type: object
+      required:
+        -  orderID
+        -  symbol
+        -  orderSide
+        -  orderType
+        -  timeStamp
+      properties:
+        orderID:
+          type: string
+          description: "OrderID is a unique alphanumemric identifier for the order."
+          example: "49a58c4c-7b43"
+        symbol:
+          type: string
+          minLength: 6
+          description: order symbol
+          example: "ETHBTC"
+        orderSide:
+          type: integer
+          description: >
+            1 - Buy Order
+            2 - Sell Order
+          enum:
+            - 1
+            - 2
+        orderType:
+          type: integer
+          description: >
+            1 - Market Order
+            2 - Limit Order
+            3 - Stop Order
+          enum:
+            - 1
+            - 2
+            - 3
+        orderQty:
+          type: string
+          description: "Decimal quantity of the order."
+          format: float
+          example: "0.56"
+        price:
+          type: string
+          description: "Required for Limit or Stop orders."
+          format: float
+          example: "2.56"
+        minQty:
+          type: string
+          description: "Minimum fill size for the oder."
+          format: float
+          example: "0.5"
+        timeStamp:
+          type: integer
+          format: int64
+          description: "Epoc time of the order"
+          example: 1614682480
+        priceDeviation:
+          type: string
+          description: "How much the fill price can deviate from the order price."
+          format: float
+          example: "0.02"
+        currency:
+          type: string
+          description: "Applies only for makers receiving new orders from CEA"
+          example: "BTC"
+
+    orderUpdate:
+      type: object
+      required:
+      - orderID
+      - status
+      - executionID
+      properties:
+        orderID:
+          type: string
+          description: "OrderID is a unique alphanumemric identifier for the order."
+          example: "49a58c4c-7b43"
+        status:
+          type: integer
+          description: >
+            1 - Order Created.
+            2 - Order Rejected.
+            3 - Order Filled.
+            4 - Order Partially Filled.
+            5 - Order Cancelled.
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+        executionID:
+          type: string
+          description: "unique alphanumeric id"
+          example: "2s3s56"
+        fillQty:
+          type: string
+          format: float
+          description: for status 3 or 4, the size of the fill
+          example: "50.00"
+        fillPrice:
+          type: string
+          description: "price used for this fill"
+          example: "0.2521"
+        missingQty:
+          type: string
+          description: "missing quantity from the order"
+          example: "25.50"
+        execQty:
+          type: string
+          description: "executed quantity across all fills"
+          example: "30.00"
+        avgPrice:
+          type: string
+          description: "Average price for the executed fills"
+          example: "0.36"
+        settleDate:
+          type: string
+          description: "date of the fill, don't use hyphens backslash or any other separator"
+          format: "yyyymmdd"
+          example: "20091110"
+        transactTime:
+          type: integer
+          description: "timestamp of the update"
+          example: 1614682480
+
+channels:
+  maker/orderbook/set:
+    publish:
+      message:
+        name: "orderbook"
+        title: "Orderbook"
+        summary: "Exchanges can use this channel to stream symbols orderbook"
+        payload:
+          $ref: "#/components/schemas/orderbook"
+
+    subscribe:
+      message:
+        name: "orderbook error"
+        title: "Orderbook Error"
+        summary: "When there are errors in the Orderbook message, this channel will return an error."
+        payload:
+          $ref: "#/components/schemas/requestErrorMsg"
+
+  taker/orderbook/get:
+    publish:
+      message:
+        name: "orderbook response"
+        title: "Orderbook Reponse"
+        summary: "Start a WebSocket connection used by the exchange to receive aggregated orderbook for the specified symbol"
+        payload:
+          type: object
+          required:
+            -  symbol
+            -  depth
+            -  subscriptionType
+          properties:
+            symbol:
+              type: string
+              minLength: 6
+              description: pair symbol
+              example: "ETHBTC"
+            depth:
+              type: integer
+              minimum: 0
+              example: 6
+              description: "order book depth, a depth of 0 means full book."
+            subscriptionType:
+              type: integer
+              description: >
+                1 - To subscribe to aggregated orderbook for the specified symbol.
+                2 - To unsubscribe or request once
+              enum:
+                -  1
+                -  2
+    subscribe:
+      message:
+        name: "aggregated orderbook"
+        title: "Aggregater Orderbook"
+        summary: "Aggregated result for the specified symbol"
+        payload:
+          type: object
+          properties:
+            responseType:
+              type: integer
+              description: >
+                1 - Orderbook update.
+                2 - Request error.
+              enum:
+                -  1
+                -  2
+            err:
+              description: "this will be null in case there are no error"
+              oneOf:
+                - $ref: "#/components/schemas/requestResponseError"
+                - type: "null"
+            book:
+              $ref: "#/components/schemas/orderbook"
+
+  taker/order/set:
+    publish:
+      message:
+        name: "New Order"
+        title: "New Order"
+        summary: "Start a WebSocket connection used by the exchange to submit orders that will be resolved by the aggregated order book"
+        payload:
+          $ref: "#/components/schemas/newOrder"
+
+    subscribe:
+      message:
+        name: "Neworder request error."
+        title: "New Order Request Error"
+        summary: "This channel will not return any response, unless there is an error with a submited Order."
+        payload:
+          type: object
+          properties:
+            originalMessage:
+              type: string
+              description: "Original submited order message"
+              example: '{"orderID": "2541a-52as5-1as25", "orderQty": "a"}'
+            errorType:
+              type: string
+              enum:
+                - "NEW ORDER REQUEST: Malformed Request"
+                - "NEW ORDER REQUEST: Server Error"
+            errorMessage:
+              type: string
+              description: "Description of error."
+              example: "field orderQty does not contain a numeric value"
+
+  taker/order/set/update:
+    subscribe:
+      message:
+        name: "Get order update"
+        title: "Get Order Update"
+        summary: "This channel allows an exchange to submit update or cancel request for active orders."
+        payload:
+          $ref: "#/components/schemas/orderUpdate"
+
+  maker/order/get:
+    subscribe:
+      message:
+        name: "Get Order"
+        title: "Get Order"
+        summary: "Start a WebSocket connection used by the exchange to receive orders that need to be executed accordingly with the submitted order book."
+        payload:
+          $ref: "#/components/schemas/newOrder"
+
+
+  maker/order/get/update:
+    publish:
+      message:
+        name: "Set order update"
+        title: "Set Order Update"
+        summary: "Start a WebSocket connection used by the to submit order execution updates."
+        payload:
+          $ref: "#/components/schemas/orderUpdate"
+
+    subscribe:
+      message:
+        name: "Order update error"
+        title: "Order update error"
+        summary: "This chanel will not return messages unless there is an error with the order update"
+        payload:
+          $ref: "#/components/schemas/requestErrorMsg"
+
